@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllData, getDataById, createDB } = require('../service/user.service');
+const { getAllData, getDataById, createData, deleteDataByIdDB,  } = require('../service/user.service');
 const route = express.Router();
 
 route.get(`/`, async (req, res) => {
@@ -20,13 +20,24 @@ route.get('/:id', async (req, res) => {
     }
 });
 
-route.post('/', async (req, res) =>{
-    try{
-        const{name, surname, birth, city, age} = req.body;
+route.post('/', async (req, res) => {
+    try {
+        const { name, surname, birth, city, age } = req.body;
         const data = await createData(name, surname, birth, city, age);
         res.send(data);
-    }catch(err){
+    } catch (err) {
         res.send(err)
+    }
+});
+
+route.put('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, surname, birth, city, age } = req.body;
+        const data = await UpdateData(id, name, surname, birth, city, age);
+        res.send(data);
+    } catch (err) {
+        res.send(err);
     }
 })
 

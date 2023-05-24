@@ -1,19 +1,24 @@
-const {getAllDataDB, getById, createData} = require('../repository/user.repository');
+const { getAllDataDB, getDataById, createDB, deleteDataById} = require('../repository/user.repository');
 
 
-async function getAllData(){
+async function getAllData() {
     const data = await getAllDataDB()
     return data;
 }
 
-async function getDataById(){
-    const data = await getById()
+async function getById(id) {
+    const data = await getDataById(id)
     return data;
 }
 
-async function createDB(){
-    const data = await createData()
+async function createData(name, surname, birth, city, age) {
+    const data = await createDB(name, surname, birth, city, age)
     return data;
 }
 
-module.exports = {getAllData, getDataById, createDB};
+async function deleteDataByIdDB(id) {
+    const data = await deleteDataById(id);
+    return data;
+}
+
+module.exports = { getAllData, getById, createData, deleteDataByIdDB };
