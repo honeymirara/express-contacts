@@ -25,6 +25,11 @@ const sql2 = `INSERT INTO users(name, surname, info_id) VALUES ($1, $2, $3) RETU
 const result2 = (await client.query(sql2, [name, surname, result1[0].id])).rows;
 return {...result1[0], ...result2[0]}};
 
+
+async function UpdateData(name, surname, birth, city, age, id){
+    
+} 
+
 async function deleteDataById(id){
     const client = await pool.connect();
     const sql1 = `DELETE FROM users WHERE info_id = $1 RETURNING *`;

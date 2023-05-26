@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllData, getDataById, createData, deleteDataByIdDB, } = require('../service/user.service');
+const { getAllData, getById, createData, deleteDataByIdDB, } = require('../service/user.service');
 const route = express.Router();
 
 route.get(`/`, async (req, res) => {
@@ -13,7 +13,8 @@ route.get(`/`, async (req, res) => {
 
 route.get('/:id', async (req, res) => {
     try {
-        const data = await getDataById(id);
+        const { id } = req.params;
+        const data = await getById(id);
         res.send(data);
     } catch (err) {
         res.send(err.message);
@@ -41,7 +42,7 @@ route.put('/:id', async (req, res) => {
     }
 });
 
-route.delete('/', async (req, res) => {
+route.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const data = await deleteDataById(id)
