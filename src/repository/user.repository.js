@@ -18,19 +18,23 @@ async function getDataById(id) {
 
 
 async function createDB(name, surname, birth, city, age) {
-const client = await pool.connect();
-const sql1 = `INSERT INTO users_info(birth, city, age) VALUES ($1, $2, $3)`
-const result1 = (await client.query(sql1, [birth, city, age])).rows
-const sql2 = `INSERT INTO users(name, surname, info_id) VALUES ($1, $2, $3) RETURNING *`;
-const result2 = (await client.query(sql2, [name, surname, result1[0].id])).rows;
-return {...result1[0], ...result2[0]}};
+    const client = await pool.connect();
+    const sql1 = `INSERT INTO users_info(birth, city, age) VALUES ($1, $2, $3)`
+    const result1 = (await client.query(sql1, [birth, city, age])).rows
+    const sql2 = `INSERT INTO users(name, surname, info_id) VALUES ($1, $2, $3) RETURNING *`;
+    const result2 = (await client.query(sql2, [name, surname, result1[0].id])).rows;
+    return { ...result1[0], ...result2[0] }
+};
 
 
-async function UpdateData(name, surname, birth, city, age, id){
-    
-} 
+async function updateData(name, surname, birth, city, age, id) {
+    const client = await pool.connect();
+    const sql = `UPDATE university SET name = $1, surname = $2, birth = $3, city = $4, age = $5 WHEN id = $6 returning *`;
+    const result = (await client.query(sql, [label, category, priority, id])).rows;
+    return result;
+}
 
-async function deleteDataById(id){
+async function deleteDataById(id) {
     const client = await pool.connect();
     const sql1 = `DELETE FROM users WHERE info_id = $1 RETURNING *`;
     const data1 = (await client.query(sql1, [id])).rows;
@@ -38,10 +42,10 @@ async function deleteDataById(id){
     const sql2 = `DELETE FROM users_info WHERE id = $1 RETURNING *`
     const data2 = (await client.query(sql2, [id])).rows;
 
-    return {...data1[0], ...data2[0]}
+    return { ...data1[0], ...data2[0] }
 }
 
 
 
 
-module.exports = { getAllDataDB, getDataById, createDB, deleteDataById };
+module.exports = { getAllDataDB, getDataById, createDB, updateData, deleteDataById };
