@@ -30,7 +30,7 @@ async function createDB(name, surname, birth, city, age) {
 async function updateData(name, surname, birth, city, age, id) {
     const client = await pool.connect();
     const sql = `UPDATE university SET name = $1, surname = $2, birth = $3, city = $4, age = $5 WHEN id = $6 returning *`;
-    const result = (await client.query(sql, [label, category, priority, id])).rows;
+    const result = (await client.query(sql, [name, surname, birth, city, age, id])).rows;
     return result;
 }
 

@@ -45,7 +45,7 @@ route.put('/:id', async (req, res) => {
 route.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const data = await deleteDataById(id)
+        const data = await deleteDataByIdDB(id)
         res.send(data);
     } catch (err) {
         res.send(err);
