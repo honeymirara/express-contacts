@@ -1,4 +1,4 @@
-function isValidEnvironmentId(req, res, next) {
+function isValidUserId(req, res, next) {
     const { id } = req.params;
     if (isNaN(id)) throw new Error('id is not a num');
     if (id < 0) throw new Error('id is a negative');
@@ -18,4 +18,4 @@ function isValidBody(req, res, next) {
     next()
 }
 
-module.exports = { isValidEnvironmentId, isValidBody };
+module.exports = { isValidUserId, isValidBody };

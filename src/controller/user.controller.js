@@ -1,5 +1,5 @@
 const express = require('express');
-const { isValidEnvironmentId, isValidBody } = require('../helper/validation');
+const { isValidUserId, isValidBody } = require('../helper/validation');
 const { getAllData, getById, createData, updateDataDB, deleteDataByIdDB } = require('../service/user.service');
 const { buildResponse } = require("../helper/buildResponse");
 const route = express.Router();
@@ -13,7 +13,7 @@ route.get(`/`, async (req, res) => {
     }
 });
 
-route.get('/:id', isValidEnvironmentId, async (req, res) => {
+route.get('/:id', isValidUserId, async (req, res) => {
     try {
         const { id } = req.params;
         const data = await getById(id);
@@ -23,7 +23,7 @@ route.get('/:id', isValidEnvironmentId, async (req, res) => {
     }
 });
 
-route.post('/', isValidEnvironmentId, isValidBody, async (req, res) => {
+route.post('/', isValidUserId, isValidBody, async (req, res) => {
     try {
         const { name, surname, birth, city, age } = req.body;
         const data = await createData(name, surname, birth, city, age);
@@ -33,7 +33,7 @@ route.post('/', isValidEnvironmentId, isValidBody, async (req, res) => {
     }
 });
 
-route.put('/:id', isValidEnvironmentId, isValidBody, async (req, res) => {
+route.put('/:id', isValidUserId, isValidBody, async (req, res) => {
     try {
         const { id } = req.params;
         const { name, surname, birth, city, age } = req.body;
@@ -44,7 +44,7 @@ route.put('/:id', isValidEnvironmentId, isValidBody, async (req, res) => {
     }
 });
 
-route.delete('/:id', isValidEnvironmentId, async (req, res) => {
+route.delete('/:id', isValidUserId, async (req, res) => {
     try {
         const { id } = req.params;
         const data = await deleteDataByIdDB(id)
