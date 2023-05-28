@@ -6,7 +6,7 @@ async function getAllDataDB() {
     const sql = 'SELECT * FROM users '
     const result = (await client.query(sql)).rows;
     return result;
-}
+};
 
 async function getDataById(id) {
     const client = await pool.connect()
@@ -22,17 +22,16 @@ async function createDB(name, surname, birth, city, age) {
     try {
         await client.query('BEGIN');
 
-        const sql1 = `INSERT INTO users_info(birth, city, age) VALUES ($1, $2, $3)`
+        const sql1 = `INSERT INTO users_info(birth, city, age) VALUES ($1, $2, $3) RETURNING *`
         const result1 = (await client.query(sql1, [birth, city, age])).rows
 
         const sql2 = `INSERT INTO users(name, surname, info_id) VALUES ($1, $2, $3) RETURNING *`;
         const result2 = (await client.query(sql2, [name, surname, result1[0].id])).rows;
         await client.query('COMMIT');
-        return { ...result1[0], ...result2[0] }
+        return { ...result1[0], ...result2[0] } //влзращаем объект
     } catch (err) {
         await client.query('ROLLBACK');
-
-        return null;
+        return null; //возращаем null
     }
 };
 
@@ -42,11 +41,13 @@ async function updateData(name, surname, birth, city, age, id) {
     try {
         await client.query('BEGIN');
 
-        const sql = `UPDATE university SET name = $1, surname = $2, birth = $3, city = $4, age = $5 WHEN id = $6 returning *`;
-        const result = (await client.query(sql, [name, surname, birth, city, age, id])).rows;
+        const sql1 = `UPDATE users SET name = $1, surname = $2 WHERE info_id = $3 returning *`;
+        const result1 = (await client.query(sql1, [name, surname, id])).rows;
+        const sql2 = ` UPDATE users_info SET birth=$1, city=$2, age=$3 WHERE id = $4 returning *`;
+        const result2 = (await client.query(sql2, [birth, city, age, id])).rows;
         await client.query('COMMIT');
-
-        return result;
+        
+        return { ...result1[0], ...result2[0]};
 
     } catch (err) {
         await client.query('ROLLBACK');
